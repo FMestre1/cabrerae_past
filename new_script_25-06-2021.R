@@ -9,6 +9,8 @@ library(raster)
 library(plyr)
 library(fuzzySim)
 
+
+
 #Upload species data
 
 
