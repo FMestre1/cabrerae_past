@@ -9,7 +9,7 @@ library(raster)
 library(plyr)
 library(fuzzySim)
 
-
+save.image(file='cabrerae_past.RData')
 
 #Upload species data
 

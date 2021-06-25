@@ -105,12 +105,20 @@ mc<-mc[,c(5,6,9)]
 mc <- mc[mc[,3]==1,1:2]
 mc <- SpatialPoints(mc)
 
+#NOT THIS SHAPE
+#mc_R <- rgdal::readOGR("F:/Dados biológicos/Mcabrerae_total/Mcabrerae_total_3.shp")
+#mc_R <- mc_R[mc_R$Presenca == 1,]
+#mc_R <- rgeos::gCentroid(mc_R,byid=TRUE)
+#plot(mc_R)
+
+
 #Loading variables
 bio4 <- raster("current/bio4.tif")
 bio8 <- raster("current/bio8.tif")
 bio12 <- raster("current/bio12.tif")
 bio18 <- raster("current/bio18.tif")
 vars <- stack(bio4, bio8, bio12, bio18)
+plot(vars)
 
 #Format data for biomod2
 data_biomod <- BIOMOD_FormatingData(resp.var = mc,
