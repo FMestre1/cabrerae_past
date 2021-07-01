@@ -1260,7 +1260,6 @@ YD2
 MH <- stack(HOL_R_miroc, HOL_R_mpi, HOL_R_bcc, HOL_R_ccsm4, HOL_R_cnrm,
 HOL_R_hadgem2_cc, HOL_R_hadgem2_es, HOL_R_ipsl, HOL_R_mri)
 
-
 #LGM
 mean_LGM <- calc(LGM, fun=mean)
 sd_LGM <- calc(LGM, fun=sd)
