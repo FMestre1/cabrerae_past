@@ -612,6 +612,9 @@ mc_Hol_MRI_Ens <- BIOMOD_EnsembleForecasting( projection.output=mc_MRI,
 ##############################################################
 ############################# YD #############################
 ##############################################################
+
+YD_coastline <- shapefile("C:/Doc/costa_YD.shp")
+
 #Load rasters
 bio4_YD <- raster("D:/Dados climáticos/Dados do passado/PaleoClim/2.5m/YDS_v1_2_5m/bio_4.tif")
 bio8_YD <- raster("D:/Dados climáticos/Dados do passado/PaleoClim/2.5m/YDS_v1_2_5m/bio_8.tif")
@@ -621,8 +624,8 @@ bio18_YD <- raster("D:/Dados climáticos/Dados do passado/PaleoClim/2.5m/YDS_v1_
 
 #Stack
 YD <- stack(bio4_YD,bio8_YD,bio12_YD,bio18_YD)
-yd_C <- crop(YD, study_site)
-yd_C <- mask(yd_C, study_site)
+yd_C <- crop(YD, YD_coastline)
+yd_C <- mask(yd_C, YD_coastline)
 yd_C <- stack(yd_C)
 names(yd_C)<- c("bio4","bio8","bio12","bio18")
 plot(yd_C)
@@ -815,13 +818,39 @@ writeRaster(x=CURRENT_MODEL, filename="CURRENT_MODEL.tif")
 ##########################################################################
 ################################ Analyzing Outputs #######################
 ##########################################################################
-#AQUI
+
+##############################################################
+########### YOUNGER DRYAS - FOSSIL VS GENERAL ################
+##############################################################
+
 fossil_prone <- shapefile("D:/sig_past_cabrera_distribution/fossilProne/fossil_prone.shp")
 #plot(fossil_prone)
 
 #Ceating mask rasters
-mask <- rasterize(fossil_prone, H_BCC)
-mask2 <- rasterize(fossil_prone,LGM_CCSM4)
+mask3 <- rasterize(fossil_prone, YD2)
+#plot(mask3)
+
+#Do not to which fossil record to compare. Maybe LGM?!
+
+#BACKGROUND - FOSSIL PRONE REGION ################################
+#if I use the LGM fossils...
+YD_out <- raster("YD.tif")
+YD_out2 <- mask3*YD_out
+fos_YD <- extract(x=YD_out2, y=fos_lgm)
+back_YD_fp <- as.vector(as.matrix(YD_out2))
+back_YD_fp <- back_YD_fp[!is.na(back_YD_fp)]
+
+
+#BACKGROUND - ALL AREA ###########################################
+
+#####BCC-CSM1-1
+back_YD <- as.vector(as.matrix(YD_out))
+back_YD <- back_YD[!is.na(back_YD)]
+
+#t Student test
+m_fp <- t.test(x=fos_YD, y=back_YD_fp, alternative="greater")
+n_fp <- t.test(x=fos_YD, y=back_YD, alternative="greater")
+#Too few to compare to...
 
 ##############################################################
 ############# HOLOCENE - FOSSIL VS GENERAL ###################
@@ -831,128 +860,129 @@ mask2 <- rasterize(fossil_prone,LGM_CCSM4)
 
 #Fossil Shapefile
 fos_hol <- shapefile("C:/Users/Frederico/Documents/0. Artigos/4. SUBMETIDOS/Cabrerae Paleodistribution/Paleo/fossils_MH.shp")
-#area_H <- shapefile("D:/Doc/area_CURRENT_passado_3.shp")
-#fos_hol <- fos_hol[ which(fos_hol$MH=='MH') , ]
-
 
 #BACKGROUND - FOSSIL PRONE REGION  ###########################################
 
 #####BCC-CSM1-1
 H_BCC <- raster("HOL_BCC.tif")
-H_BCC2 <- mask*H_BCC
+H_BCC2 <- mask1*H_BCC
 fos_H_BCC <- extract(x=H_BCC, y=fos_hol)
-back_H_BCC <- as.vector(as.matrix(H_BCC2))
-back_H_BCC <- back_H_BCC[!is.na(back_H_BCC)]
+back_H_BCC_fp <- as.vector(as.matrix(H_BCC2))
+back_H_BCC_fp <- back_H_BCC_fp[!is.na(back_H_BCC_fp)]
 
 #####CCSM4
-H_CCSM4 <- raster("~/HOLOCENE/HOL_CCSM4.tif")
-H_CCSM42 <- mask*H_CCSM4
+H_CCSM4 <- raster("HOL_CCSM4.tif")
+H_CCSM42 <- mask1*H_CCSM4
 fos_H_CCSM4 <- extract(x=H_CCSM4, y=fos_hol)
-back_H_CCSM4 <- as.vector(as.matrix(H_CCSM42))
-back_H_CCSM4 <- back_H_CCSM4[!is.na(back_H_CCSM4)]
+back_H_CCSM4_fp <- as.vector(as.matrix(H_CCSM42))
+back_H_CCSM4_fp <- back_H_CCSM4_fp[!is.na(back_H_CCSM4_fp)]
 
 #####CNRM-CM5
-H_CNRM <- raster("~/HOLOCENE/HOL_CNRM.tif")
-H_CNRM2 <- mask*H_CNRM
+H_CNRM <- raster("HOL_CNRM.tif")
+H_CNRM2 <- mask1*H_CNRM
 fos_H_CNRM <- extract(x=H_CNRM, y=fos_hol)
-back_H_CNRM <- as.vector(as.matrix(H_CNRM2))
-back_H_CNRM <- back_H_CNRM[!is.na(back_H_CNRM)]
+back_H_CNRM_fp <- as.vector(as.matrix(H_CNRM2))
+back_H_CNRM_fp <- back_H_CNRM_fp[!is.na(back_H_CNRM_fp)]
 
 #####HadGEM2-CC
-H_HadGEM2_CC <- raster("~/HOLOCENE/HOL_HadGEM2_CC.tif")
-H_HadGEM2_CC2 <- mask*H_HadGEM2_CC
+H_HadGEM2_CC <- raster("HOL_HadGEM2_CC.tif")
+H_HadGEM2_CC2 <- mask1*H_HadGEM2_CC
 fos_H_HadGEM2_CC <- extract(x=H_HadGEM2_CC, y=fos_hol)
-back_H_HadGEM2_CC <- as.vector(as.matrix(H_HadGEM2_CC2))
-back_H_HadGEM2_CC <- back_H_HadGEM2_CC[!is.na(back_H_HadGEM2_CC)]
+back_H_HadGEM2_CC_fp <- as.vector(as.matrix(H_HadGEM2_CC2))
+back_H_HadGEM2_CC_fp <- back_H_HadGEM2_CC_fp[!is.na(back_H_HadGEM2_CC_fp)]
 
 #####HadGEM2-ES
-H_HadGEM2_ES <- raster("~/HOLOCENE/HOL_HadGEM2_ES.tif")
-H_HadGEM2_ES2 <- mask*H_HadGEM2_ES
+H_HadGEM2_ES <- raster("HOL_HadGEM2_ES.tif")
+H_HadGEM2_ES2 <- mask1*H_HadGEM2_ES
 fos_H_HadGEM2_ES <- extract(x=H_HadGEM2_ES, y=fos_hol)
-back_H_HadGEM2_ES <- as.vector(as.matrix(H_HadGEM2_ES2))
-back_H_HadGEM2_ES <- back_H_HadGEM2_ES[!is.na(back_H_HadGEM2_ES)]
+back_H_HadGEM2_ES_fp <- as.vector(as.matrix(H_HadGEM2_ES2))
+back_H_HadGEM2_ES_fp <- back_H_HadGEM2_ES_fp[!is.na(back_H_HadGEM2_ES_fp)]
 
 #####IPSL-CM5A-LR
-H_IPSL <- raster("~/HOLOCENE/HOL_IPSL.tif")
-H_IPSL2 <- mask*H_IPSL
+H_IPSL <- raster("HOL_IPSL.tif")
+H_IPSL2 <- mask1*H_IPSL
 fos_H_IPSL <- extract(x=H_IPSL, y=fos_hol)
-back_H_IPSL <- as.vector(as.matrix(H_IPSL2))
-back_H_IPSL <- back_H_IPSL[!is.na(back_H_IPSL)]
+back_H_IPSL_fp <- as.vector(as.matrix(H_IPSL2))
+back_H_IPSL_fp <- back_H_IPSL_fp[!is.na(back_H_IPSL_fp)]
 
 #####MIROC-ESM
-H_MIROC <- raster("~/HOLOCENE/HOL_MIROC.tif")
-H_MIROC2 <- mask*H_MIROC
+H_MIROC <- raster("HOL_MIROC.tif")
+H_MIROC2 <- mask1*H_MIROC
 fos_H_MIROC <- extract(x=H_MIROC, y=fos_hol)
-back_H_MIROC <- as.vector(as.matrix(H_MIROC2))
-back_H_MIROC <- back_H_MIROC[!is.na(back_H_MIROC)]
+back_H_MIROC_fp <- as.vector(as.matrix(H_MIROC2))
+back_H_MIROC_fp <- back_H_MIROC_fp[!is.na(back_H_MIROC_fp)]
 
 #####MPI-ESM-P
-H_MPI <- raster("~/HOLOCENE/HOL_MPI.tif")
-H_MPI2 <- mask*H_MPI
+H_MPI <- raster("HOL_MPI.tif")
+H_MPI2 <- mask1*H_MPI
 fos_H_MPI <- extract(x=H_MPI, y=fos_hol)
-back_H_MPI <- as.vector(as.matrix(H_MPI2))
-back_H_MPI <- back_H_MPI[!is.na(back_H_MPI)]
+back_H_MPI_fp <- as.vector(as.matrix(H_MPI2))
+back_H_MPI_fp <- back_H_MPI_fp[!is.na(back_H_MPI_fp)]
 
 #####MRI-CGCM3
-H_MRI <- raster("~/HOLOCENE/HOL_MRI.tif")
-H_MRI2 <- mask*H_MRI
+H_MRI <- raster("HOL_MRI.tif")
+H_MRI2 <- mask1*H_MRI
 fos_H_MRI <- extract(x=H_MRI, y=fos_hol)
-back_H_MRI <- as.vector(as.matrix(H_MRI2))
-back_H_MRI <- back_H_MRI[!is.na(back_H_MRI)]
+back_H_MRI_fp <- as.vector(as.matrix(H_MRI2))
+back_H_MRI_fp <- back_H_MRI_fp[!is.na(back_H_MRI_fp)]
+
+#t Student test
+a_fp <- t.test(x=fos_H_BCC, y=back_H_BCC_fp, alternative="greater")
+b_fp <- t.test(x=fos_H_CCSM4, y=back_H_CCSM4_fp, alternative="greater")
+c1_fp <- t.test(x=fos_H_CNRM, y=back_H_CNRM_fp, alternative="greater")
+d_fp <- t.test(x=fos_H_HadGEM2_CC, y=back_H_HadGEM2_CC_fp, alternative="greater")
+e_fp <- t.test(x=fos_H_HadGEM2_ES, y=back_H_HadGEM2_ES_fp, alternative="greater")
+f_fp <- t.test(x=fos_H_IPSL, y=back_H_IPSL_fp, alternative="greater")
+g_fp <- t.test(x=fos_H_MIROC, y=back_H_MIROC_fp, alternative="greater")
+h_fp <- t.test(x=fos_H_MPI, y=back_H_MPI_fp, alternative="greater")
+i_fp <- t.test(x=fos_H_MRI, y=back_H_MRI_fp, alternative="greater")
+
+round(a_fp$p.value, 3)
+round(b_fp$p.value, 3) 
+round(c1_fp$p.value, 3)
+round(d_fp$p.value, 3)
+round(e_fp$p.value, 3)
+round(f_fp$p.value, 3)
+round(g_fp$p.value, 3)
+round(h_fp$p.value, 3)
+round(i_fp$p.value, 3)
+
 
 #BACKGROUND - ALL AREA ###########################################
 
 #####BCC-CSM1-1
-H_BCC <- raster("~/HOLOCENE/HOL_BCC.tif")
-fos_H_BCC <- extract(x=H_BCC, y=fos_hol)
 back_H_BCC <- as.vector(as.matrix(H_BCC))
 back_H_BCC <- back_H_BCC[!is.na(back_H_BCC)]
 
 #####CCSM4
-H_CCSM4 <- raster("~/HOLOCENE/HOL_CCSM4.tif")
-fos_H_CCSM4 <- extract(x=H_CCSM4, y=fos_hol)
 back_H_CCSM4 <- as.vector(as.matrix(H_CCSM4))
 back_H_CCSM4 <- back_H_CCSM4[!is.na(back_H_CCSM4)]
 
 #####CNRM-CM5
-H_CNRM <- raster("~/HOLOCENE/HOL_CNRM.tif")
-fos_H_CNRM <- extract(x=H_CNRM, y=fos_hol)
 back_H_CNRM <- as.vector(as.matrix(H_CNRM))
 back_H_CNRM <- back_H_CNRM[!is.na(back_H_CNRM)]
 
 #####HadGEM2-CC
-H_HadGEM2_CC <- raster("~/HOLOCENE/HOL_HadGEM2_CC.tif")
-fos_H_HadGEM2_CC <- extract(x=H_HadGEM2_CC, y=fos_hol)
 back_H_HadGEM2_CC <- as.vector(as.matrix(H_HadGEM2_CC))
 back_H_HadGEM2_CC <- back_H_HadGEM2_CC[!is.na(back_H_HadGEM2_CC)]
 
 #####HadGEM2-ES
-H_HadGEM2_ES <- raster("~/HOLOCENE/HOL_HadGEM2_ES.tif")
-fos_H_HadGEM2_ES <- extract(x=H_HadGEM2_ES, y=fos_hol)
 back_H_HadGEM2_ES <- as.vector(as.matrix(H_HadGEM2_ES))
 back_H_HadGEM2_ES <- back_H_HadGEM2_ES[!is.na(back_H_HadGEM2_ES)]
 
 #####IPSL-CM5A-LR
-H_IPSL <- raster("~/HOLOCENE/HOL_IPSL.tif")
-fos_H_IPSL <- extract(x=H_IPSL, y=fos_hol)
 back_H_IPSL <- as.vector(as.matrix(H_IPSL))
 back_H_IPSL <- back_H_IPSL[!is.na(back_H_IPSL)]
 
 #####MIROC-ESM
-H_MIROC <- raster("~/HOLOCENE/HOL_MIROC.tif")
-fos_H_MIROC <- extract(x=H_MIROC, y=fos_hol)
 back_H_MIROC <- as.vector(as.matrix(H_MIROC))
 back_H_MIROC <- back_H_MIROC[!is.na(back_H_MIROC)]
 
 #####MPI-ESM-P
-H_MPI <- raster("~/HOLOCENE/HOL_MPI.tif")
-fos_H_MPI <- extract(x=H_MPI, y=fos_hol)
 back_H_MPI <- as.vector(as.matrix(H_MPI))
 back_H_MPI <- back_H_MPI[!is.na(back_H_MPI)]
 
 #####MRI-CGCM3
-H_MRI <- raster("~/HOLOCENE/HOL_MRI.tif")
-fos_H_MRI <- extract(x=H_MRI, y=fos_hol)
 back_H_MRI <- as.vector(as.matrix(H_MRI))
 back_H_MRI <- back_H_MRI[!is.na(back_H_MRI)]
 
@@ -989,6 +1019,7 @@ round(g$p.value, 3)
 round(h$p.value, 3)
 round(i$p.value, 3)
 
+##
 
 #HOLOCENE - MEAN AVERAGE SUITABILITY IN FOSSIL RECORD
 boxplot(
@@ -1017,17 +1048,16 @@ box()
 ##############################################################
 
 #Fossil Shapefile
-fos_lgm <- shapefile("D:/Doc/fosseis_garcia_garrido.shp")
-area_LGM <- shapefile("D:/Doc/lgm3.shp")
-fos_lgm <- fos_lgm[ which(fos_lgm$LGM=='LGM') , ]
-#plot(area_LGM)
-#plot(fos_lgm, add = TRUE)
+fos_lgm <- shapefile("C:/Users/Frederico/Documents/0. Artigos/4. SUBMETIDOS/Cabrerae Paleodistribution/Paleo/fossils_LGM.shp")
+
+#Creating mask
+mask2 <- rasterize(fossil_prone,LGM_CCSM4)
+#plot(mask2)
 
 #BACKGROUND - FOSSIL PRONE REGION
 
-
 #####CCSM4
-LGM_CCSM4 <- raster("C:/Users/FMest/Documents/Manuscripts/Cabrerae/output/LGM/LGM_CCSM4.tif")
+LGM_CCSM4 <- raster("LGM_CCSM4.tif")
 LGM_CCSM42 <- mask2*LGM_CCSM4
 fos_LGM_CCSM4 <- extract(x=LGM_CCSM4, y=fos_lgm)
 back_LGM_CCSM4 <- as.vector(as.matrix(LGM_CCSM42))
@@ -1035,7 +1065,7 @@ back_LGM_CCSM4 <- back_LGM_CCSM4[!is.na(back_LGM_CCSM4)]
 #boxplot(fos_LGM_CCSM4, back_LGM_CCSM4, main="CCSM4", names=c("fossil occ.","backgroung"))
 
 #####MIROC-ESM
-LGM_MIROC <- raster("C:/Users/FMest/Documents/Manuscripts/Cabrerae/output/LGM/LGM_MIROC.tif")
+LGM_MIROC <- raster("LGM_MIROC.tif")
 LGM_MIROC2 <- mask2*LGM_MIROC
 fos_LGM_MIROC <- extract(x=LGM_MIROC, y=fos_lgm)
 back_LGM_MIROC <- as.vector(as.matrix(LGM_MIROC2))
@@ -1043,7 +1073,7 @@ back_LGM_MIROC <- back_LGM_MIROC[!is.na(back_LGM_MIROC)]
 #boxplot(fos_LGM_MIROC, back_LGM_MIROC, main="MIROC-ESM", names=c("fossil occ.","backgroung"))
 
 #####MPI-ESM-P
-LGM_MPI <- raster("C:/Users/FMest/Documents/Manuscripts/Cabrerae/output/LGM/LGM_MPI.tif")
+LGM_MPI <- raster("LGM_MPI.tif")
 LGM_MPI2 <- mask2*LGM_MPI
 fos_LGM_MPI <- extract(x=LGM_MPI, y=fos_lgm)
 back_LGM_MPI <- as.vector(as.matrix(LGM_MPI2))
@@ -1051,24 +1081,17 @@ back_LGM_MPI <- back_LGM_MPI[!is.na(back_LGM_MPI)]
 #boxplot(fos_LGM_MPI, back_LGM_MPI, main="MPI-ESM-P", names=c("fossil occ.","backgroung"))
 
 #BACKGROUND - FOSSIL PRONE REGION
-
 #####CCSM4
-LGM_CCSM4 <- raster("C:/Users/FMest/Documents/Manuscripts/Cabrerae/output/LGM/LGM_CCSM4.tif")
-fos_LGM_CCSM4 <- extract(x=LGM_CCSM4, y=fos_lgm)
-back_LGM_CCSM4 <- as.vector(as.matrix(LGM_CCSM4))
-back_LGM_CCSM4 <- back_LGM_CCSM4[!is.na(back_LGM_CCSM4)]
+back_LGM_CCSM4_fp <- as.vector(as.matrix(LGM_CCSM4))
+back_LGM_CCSM4_fp <- back_LGM_CCSM4_fp[!is.na(back_LGM_CCSM4_fp)]
 
 #####MIROC-ESM
-LGM_MIROC <- raster("C:/Users/FMest/Documents/Manuscripts/Cabrerae/output/LGM/LGM_MIROC.tif")
-fos_LGM_MIROC <- extract(x=LGM_MIROC, y=fos_lgm)
-back_LGM_MIROC <- as.vector(as.matrix(LGM_MIROC))
-back_LGM_MIROC <- back_LGM_MIROC[!is.na(back_LGM_MIROC)]
+back_LGM_MIROC_fp <- as.vector(as.matrix(LGM_MIROC))
+back_LGM_MIROC_fp <- back_LGM_MIROC_fp[!is.na(back_LGM_MIROC_fp)]
 
 #####MPI-ESM-P
-LGM_MPI <- raster("C:/Users/FMest/Documents/Manuscripts/Cabrerae/output/LGM/LGM_MPI.tif")
-fos_LGM_MPI <- extract(x=LGM_MPI, y=fos_lgm)
-back_LGM_MPI <- as.vector(as.matrix(LGM_MPI))
-back_LGM_MPI <- back_LGM_MPI[!is.na(back_LGM_MPI)]
+back_LGM_MPI_fp <- as.vector(as.matrix(LGM_MPI))
+back_LGM_MPI_fp <- back_LGM_MPI_fp[!is.na(back_LGM_MPI_fp)]
 
 ########## ALL LGM
 par(mfrow=c(1,3))
@@ -1099,22 +1122,20 @@ axis(2)
 
 box()
 
+
 #############################################################################
 #############################################################################
-#Variable Importance
-#Average per algorithm
+#Variable Importance - Average per algorithm
 
 v1 <- var_import
-
-f1 <- alply(v1,4,.dims = TRUE)
+f1 <- plyr::alply(v1,4,.dims = TRUE)
 v_l <- list()
-
 
 for (i in 1:5){
 
 t1 <- f1[[i]]
 
-t1 <- alply(t1,3,.dims = TRUE)
+t1 <- plyr::alply(t1,3,.dims = TRUE)
 
 v_l <- c(v_l,t1)
 	
@@ -1124,7 +1145,7 @@ v_l <- c(v_l,t1)
 out_VI <- apply(simplify2array(v_l), 1:2, mean)
 
 #ANN has one NA (remove that 'run')
-ANN_VI <- apply(simplify2array(v_l[-28]), 1:2, mean)
+ANN_VI <- apply(simplify2array(v_l[c(-6,-20)]), 1:2, mean)
 ANN_VI <- as.numeric(ANN_VI[,5])
 out_VI[,5] <- ANN_VI
 
@@ -1134,96 +1155,94 @@ write.table(out_VI, file="VI.csv")
 #############################################################################
 #Comparing projection maps
 
-
 ##################### LGM
-
 #Loading rasters
-LGM_R_miroc <- raster("C:/Users/FMest/Documents/Manuscripts/Cabrerae/output/LGM/LGM_MIROC.tif")
-LGM_R_ccsm4 <- raster("C:/Users/FMest/Documents/Manuscripts/Cabrerae/output/LGM/LGM_CCSM4.tif")
-LGM_R_mpi <- raster("C:/Users/FMest/Documents/Manuscripts/Cabrerae/output/LGM/LGM_MPI.tif")
+LGM_R_miroc <- raster("LGM_MIROC.tif")
+LGM_R_ccsm4 <- raster("LGM_CCSM4.tif")
+LGM_R_mpi <- raster("LGM_MPI.tif")
 
 #Convert to matrix
-lgm_miroc <- getValues(LGM_R_miroc)
-lgm_ccsm4 <- getValues(LGM_R_ccsm4)
-lgm_mpi <- getValues(LGM_R_mpi)
+lgm_miroc <- getValues(LGM_R_miroc)/1000
+lgm_ccsm4 <- getValues(LGM_R_ccsm4)/1000
+lgm_mpi <- getValues(LGM_R_mpi)/1000
 
 #Compare
-LGM_miroc_ccsm4 <- modOverlap(lgm_miroc, lgm_ccsm4)
-LGM_miroc_mpi <- modOverlap(lgm_miroc, lgm_mpi)
-LGM_ccsm4_mpi <- modOverlap(lgm_ccsm4, lgm_mpi)
+LGM_miroc_ccsm4 <- fuzzySim::modOverlap(lgm_miroc, lgm_ccsm4)
+LGM_miroc_mpi <- fuzzySim::modOverlap(lgm_miroc, lgm_mpi)
+LGM_ccsm4_mpi <- fuzzySim::modOverlap(lgm_ccsm4, lgm_mpi)
 
 ##################### Mid-HOLOCENE
 
 #Load rasters
-HOL_R_miroc <- raster("C:/Users/FMest/Documents/Manuscripts/Cabrerae/output/HOLOCENE/HOL_MIROC.tif")
-HOL_R_mpi <- raster("C:/Users/FMest/Documents/Manuscripts/Cabrerae/output/HOLOCENE/HOL_MPI.tif")
-HOL_R_bcc <- raster("C:/Users/FMest/Documents/Manuscripts/Cabrerae/output/HOLOCENE/HOL_BCC.tif")
+HOL_R_miroc <- raster("HOL_MIROC.tif")
+HOL_R_mpi <- raster("HOL_MPI.tif")
+HOL_R_bcc <- raster("HOL_BCC.tif")
 
-HOL_R_ccsm4 <- raster("C:/Users/FMest/Documents/Manuscripts/Cabrerae/output/HOLOCENE/HOL_CCSM4.tif")
-HOL_R_cnrm <- raster("C:/Users/FMest/Documents/Manuscripts/Cabrerae/output/HOLOCENE/HOL_CNRM.tif")
-HOL_R_hadgem2_cc <- raster("C:/Users/FMest/Documents/Manuscripts/Cabrerae/output/HOLOCENE/HOL_HadGEM2_CC.tif")
+HOL_R_ccsm4 <- raster("HOL_CCSM4.tif")
+HOL_R_cnrm <- raster("HOL_CNRM.tif")
+HOL_R_hadgem2_cc <- raster("HOL_HadGEM2_CC.tif")
 
-HOL_R_hadgem2_es <- raster("C:/Users/FMest/Documents/Manuscripts/Cabrerae/output/HOLOCENE/HOL_HadGEM2_ES.tif")
-HOL_R_ipsl <- raster("C:/Users/FMest/Documents/Manuscripts/Cabrerae/output/HOLOCENE/HOL_IPSL.tif")
-HOL_R_mri <- raster("C:/Users/FMest/Documents/Manuscripts/Cabreraeoutput/HOLOCENE/HOL_MRI.tif")
+HOL_R_hadgem2_es <- raster("HOL_HadGEM2_ES.tif")
+HOL_R_ipsl <- raster("HOL_IPSL.tif")
+HOL_R_mri <- raster("HOL_MRI.tif")
 
 #Convert to matrix
-hol_miroc <- getValues(HOL_R_miroc)
-hol_mpi <- getValues(HOL_R_mpi)
-hol_bcc <- getValues(HOL_R_bcc)
+hol_miroc <- getValues(HOL_R_miroc)/1000
+hol_mpi <- getValues(HOL_R_mpi)/1000
+hol_bcc <- getValues(HOL_R_bcc)/1000
 
-hol_ccsm4 <- getValues(HOL_R_ccsm4)
-hol_cnrm <- getValues(HOL_R_cnrm)
-hol_hadgem2_cc <- getValues(HOL_R_hadgem2_cc)
+hol_ccsm4 <- getValues(HOL_R_ccsm4)/1000
+hol_cnrm <- getValues(HOL_R_cnrm)/1000
+hol_hadgem2_cc <- getValues(HOL_R_hadgem2_cc)/1000
 
-hol_hadgem2_es <- getValues(HOL_R_hadgem2_es)
-hol_ipsl <- getValues(HOL_R_ipsl)
-hol_mri <- getValues(HOL_R_mri)
+hol_hadgem2_es <- getValues(HOL_R_hadgem2_es)/1000
+hol_ipsl <- getValues(HOL_R_ipsl)/1000
+hol_mri <- getValues(HOL_R_mri)/1000
 
 #Compare
-HOL_miroc_mpi <- modOverlap(hol_miroc,hol_mpi)
-HOL_miroc_bcc <- modOverlap(hol_miroc,hol_bcc)
-HOL_miroc_ccsm4 <- modOverlap(hol_miroc,hol_ccsm4)
-HOL_miroc_cnrm <- modOverlap(hol_miroc,hol_cnrm)
-HOL_miroc_hadgem2_cc <- modOverlap(hol_miroc,hol_hadgem2_cc)
-HOL_miroc_hadgem2_es <- modOverlap(hol_miroc,hol_hadgem2_es)
-HOL_miroc_ipsl <- modOverlap(hol_miroc,hol_ipsl)
-HOL_miroc_mri <- modOverlap(hol_miroc,hol_mri)
+HOL_miroc_mpi <- fuzzySim::modOverlap(hol_miroc,hol_mpi)
+HOL_miroc_bcc <- fuzzySim::modOverlap(hol_miroc,hol_bcc)
+HOL_miroc_ccsm4 <- fuzzySim::modOverlap(hol_miroc,hol_ccsm4)
+HOL_miroc_cnrm <- fuzzySim::modOverlap(hol_miroc,hol_cnrm)
+HOL_miroc_hadgem2_cc <- fuzzySim::modOverlap(hol_miroc,hol_hadgem2_cc)
+HOL_miroc_hadgem2_es <- fuzzySim::modOverlap(hol_miroc,hol_hadgem2_es)
+HOL_miroc_ipsl <- fuzzySim::modOverlap(hol_miroc,hol_ipsl)
+HOL_miroc_mri <- fuzzySim::modOverlap(hol_miroc,hol_mri)
 
-HOL_mpi_bcc <- modOverlap(hol_mpi,hol_bcc)
-HOL_mpi_ccsm4 <- modOverlap(hol_mpi,hol_ccsm4)
-HOL_mpi_cnrm <- modOverlap(hol_mpi,hol_cnrm)
-HOL_mpi_hadgem2_cc <- modOverlap(hol_mpi,hol_hadgem2_cc)
-HOL_mpi_hadgem2_es <- modOverlap(hol_mpi,hol_hadgem2_es)
-HOL_mpi_ipsl <- modOverlap(hol_mpi,hol_ipsl)
-HOL_mpi_mri <- modOverlap(hol_mpi,hol_mri)
+HOL_mpi_bcc <- fuzzySim::modOverlap(hol_mpi,hol_bcc)
+HOL_mpi_ccsm4 <- fuzzySim::modOverlap(hol_mpi,hol_ccsm4)
+HOL_mpi_cnrm <- fuzzySim::modOverlap(hol_mpi,hol_cnrm)
+HOL_mpi_hadgem2_cc <- fuzzySim::modOverlap(hol_mpi,hol_hadgem2_cc)
+HOL_mpi_hadgem2_es <- fuzzySim::modOverlap(hol_mpi,hol_hadgem2_es)
+HOL_mpi_ipsl <- fuzzySim::modOverlap(hol_mpi,hol_ipsl)
+HOL_mpi_mri <- fuzzySim::modOverlap(hol_mpi,hol_mri)
 
-HOL_bcc_ccsm4 <- modOverlap(hol_bcc,hol_ccsm4)
-HOL_bcc_cnrm <- modOverlap(hol_bcc,hol_cnrm)
-HOL_bcc_hadgem2_cc <- modOverlap(hol_bcc,hol_hadgem2_cc)
-HOL_bcc_hadgem2_es <- modOverlap(hol_bcc,hol_hadgem2_es)
-HOL_bcc_ipsl <- modOverlap(hol_bcc,hol_ipsl)
-HOL_bcc_mri <- modOverlap(hol_bcc,hol_mri)
+HOL_bcc_ccsm4 <- fuzzySim::modOverlap(hol_bcc,hol_ccsm4)
+HOL_bcc_cnrm <- fuzzySim::modOverlap(hol_bcc,hol_cnrm)
+HOL_bcc_hadgem2_cc <- fuzzySim::modOverlap(hol_bcc,hol_hadgem2_cc)
+HOL_bcc_hadgem2_es <- fuzzySim::modOverlap(hol_bcc,hol_hadgem2_es)
+HOL_bcc_ipsl <- fuzzySim::modOverlap(hol_bcc,hol_ipsl)
+HOL_bcc_mri <- fuzzySim::modOverlap(hol_bcc,hol_mri)
 
-HOL_ccsm4_cnrm <- modOverlap(hol_ccsm4,hol_cnrm)
-HOL_ccsm4_hadgem2_cc <- modOverlap(hol_ccsm4,hol_hadgem2_cc)
-HOL_ccsm4_hadgem2_es <- modOverlap(hol_ccsm4,hol_hadgem2_es)
-HOL_ccsm4_ipsl <- modOverlap(hol_ccsm4,hol_ipsl)
-HOL_ccsm4_mri <- modOverlap(hol_ccsm4,hol_mri)
+HOL_ccsm4_cnrm <- fuzzySim::modOverlap(hol_ccsm4,hol_cnrm)
+HOL_ccsm4_hadgem2_cc <- fuzzySim::modOverlap(hol_ccsm4,hol_hadgem2_cc)
+HOL_ccsm4_hadgem2_es <- fuzzySim::modOverlap(hol_ccsm4,hol_hadgem2_es)
+HOL_ccsm4_ipsl <- fuzzySim::modOverlap(hol_ccsm4,hol_ipsl)
+HOL_ccsm4_mri <- fuzzySim::modOverlap(hol_ccsm4,hol_mri)
 
-HOL_cnrm_hadgem2_cc <- modOverlap(hol_cnrm,hol_hadgem2_cc)
-HOL_cnrm_hadgem2_es <- modOverlap(hol_cnrm,hol_hadgem2_es)
-HOL_cnrm_ipsl <- modOverlap(hol_cnrm,hol_ipsl)
-HOL_cnrm_mri <- modOverlap(hol_cnrm,hol_mri)
+HOL_cnrm_hadgem2_cc <- fuzzySim::modOverlap(hol_cnrm,hol_hadgem2_cc)
+HOL_cnrm_hadgem2_es <- fuzzySim::modOverlap(hol_cnrm,hol_hadgem2_es)
+HOL_cnrm_ipsl <- fuzzySim::modOverlap(hol_cnrm,hol_ipsl)
+HOL_cnrm_mri <- fuzzySim::modOverlap(hol_cnrm,hol_mri)
 
-HOL_hadgem2_cc_hadgem2_es <- modOverlap(hol_hadgem2_cc,hol_hadgem2_es)
-HOL_hadgem2_cc_ipsl <- modOverlap(hol_hadgem2_cc,hol_ipsl)
-HOL_hadgem2_cc_mri <- modOverlap(hol_hadgem2_cc,hol_mri)
+HOL_hadgem2_cc_hadgem2_es <- fuzzySim::modOverlap(hol_hadgem2_cc,hol_hadgem2_es)
+HOL_hadgem2_cc_ipsl <- fuzzySim::modOverlap(hol_hadgem2_cc,hol_ipsl)
+HOL_hadgem2_cc_mri <- fuzzySim::modOverlap(hol_hadgem2_cc,hol_mri)
 
-HOL_hadgem2_es_ipsl <- modOverlap(hol_hadgem2_es,hol_ipsl)
-HOL_hadgem2_es_mri <- modOverlap(hol_hadgem2_es,hol_mri)
+HOL_hadgem2_es_ipsl <- fuzzySim::modOverlap(hol_hadgem2_es,hol_ipsl)
+HOL_hadgem2_es_mri <- fuzzySim::modOverlap(hol_hadgem2_es,hol_mri)
 
-HOL_ipsl_mri <- modOverlap(hol_ipsl,hol_mri)
+HOL_ipsl_mri <- fuzzySim::modOverlap(hol_ipsl,hol_mri)
 
 #############################################################################
 #############################################################################
@@ -1232,27 +1251,15 @@ HOL_ipsl_mri <- modOverlap(hol_ipsl,hol_mri)
 setwd("C:/Users/FMest/Desktop")
 
 #LGM
-LGM_R_miroc <- raster("C:/Users/FMest/Documents/Manuscripts/Cabrerae/output/LGM/LGM_MIROC.tif")
-LGM_R_ccsm4 <- raster("C:/Users/FMest/Documents/Manuscripts/Cabrerae/output/LGM/LGM_CCSM4.tif")
-LGM_R_mpi <- raster("C:/Users/FMest/Documents/Manuscripts/Cabrerae/output/LGM/LGM_MPI.tif")
 LGM <- stack(LGM_R_miroc, LGM_R_ccsm4, LGM_R_mpi)
 
+#YD
+YD2
 
 #MH
-HOL_R_miroc <- raster("C:/Users/FMest/Documents/Manuscripts/Cabrerae/output/HOLOCENE/HOL_MIROC.tif")
-HOL_R_mpi <- raster("C:/Users/FMest/Documents/Manuscripts/Cabrerae/output/HOLOCENE/HOL_MPI.tif")
-HOL_R_bcc <- raster("C:/Users/FMest/Documents/Manuscripts/Cabrerae/output/HOLOCENE/HOL_BCC.tif")
-
-HOL_R_ccsm4 <- raster("C:/Users/FMest/Documents/Manuscripts/Cabrerae/output/HOLOCENE/HOL_CCSM4.tif")
-HOL_R_cnrm <- raster("C:/Users/FMest/Documents/Manuscripts/Cabrerae/output/HOLOCENE/HOL_CNRM.tif")
-HOL_R_hadgem2_cc <- raster("C:/Users/FMest/Documents/Manuscripts/Cabrerae/output/HOLOCENE/HOL_HadGEM2_CC.tif")
-
-HOL_R_hadgem2_es <- raster("C:/Users/FMest/Documents/Manuscripts/Cabrerae/output/HOLOCENE/HOL_HadGEM2_ES.tif")
-HOL_R_ipsl <- raster("C:/Users/FMest/Documents/Manuscripts/Cabrerae/output/HOLOCENE/HOL_IPSL.tif")
-HOL_R_mri <- raster("C:/Users/FMest/Documents/Manuscripts/Cabrerae/output/HOLOCENE/HOL_MRI.tif")
-
 MH <- stack(HOL_R_miroc, HOL_R_mpi, HOL_R_bcc, HOL_R_ccsm4, HOL_R_cnrm,
 HOL_R_hadgem2_cc, HOL_R_hadgem2_es, HOL_R_ipsl, HOL_R_mri)
+
 
 #LGM
 mean_LGM <- calc(LGM, fun=mean)
