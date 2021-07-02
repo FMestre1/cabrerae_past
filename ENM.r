@@ -1254,7 +1254,7 @@ HOL_ipsl_mri <- fuzzySim::modOverlap(hol_ipsl,hol_mri)
 LGM <- stack(LGM_R_miroc, LGM_R_ccsm4, LGM_R_mpi)
 
 #YD
-D3 <- raster("YD.tif")
+YD3 <- raster("YD.tif")
 
 #MH
 MH <- stack(HOL_R_miroc, HOL_R_mpi, HOL_R_bcc, HOL_R_ccsm4, HOL_R_cnrm,
