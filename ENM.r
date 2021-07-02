@@ -29,8 +29,8 @@ library(raster)
 library(plyr)
 library(fuzzySim)
 
+#Install development version of biomod2
 devtools::install_github('biomodhub/biomod2', dependencies = TRUE)
-#curl
 
 #Package citation
 citation(package = "biomod2", lib.loc = NULL, auto = NULL)
@@ -38,7 +38,6 @@ citation("raster")
 citation("maptools")
 citation("fuzzySim")
 citation("plyr")
-
 
 #Spearman correlation between variables
 b1 <- raster("D:/Doc/rasters_PIB_FR/bio1.tif")
@@ -986,18 +985,6 @@ back_H_MPI <- back_H_MPI[!is.na(back_H_MPI)]
 back_H_MRI <- as.vector(as.matrix(H_MRI))
 back_H_MRI <- back_H_MRI[!is.na(back_H_MRI)]
 
-#Creating boxplots
-par(mfrow=c(3,3))
-boxplot(fos_H_BCC, back_H_BCC, main="BCC-CSM1-1", names=c("fossil occ.","backgroung"))
-boxplot(fos_H_CCSM4, back_H_CCSM4, main="CCSM4", names=c("fossil occ.","backgroung"))
-boxplot(fos_H_CNRM, back_H_CNRM, main="CNRM-CM5", names=c("fossil occ.","backgroung"))
-boxplot(fos_H_HadGEM2_CC, back_H_HadGEM2_CC, main="HadGEM2-CC", names=c("fossil occ.","backgroung"))
-boxplot(fos_H_HadGEM2_ES, back_H_HadGEM2_ES, main="HadGEM2-ES", names=c("fossil occ.","backgroung"))
-boxplot(fos_H_IPSL, back_H_IPSL, main="IPSL-CM5A-LR", names=c("fossil occ.","backgroung"))
-boxplot(fos_H_MIROC, back_H_MIROC, main="MIROC-ESM", names=c("fossil occ.","backgroung"))
-boxplot(fos_H_MPI, back_H_MPI, main="MPI-ESM-P", names=c("fossil occ.","backgroung"))
-boxplot(fos_H_MRI, back_H_MRI, main="MRI-CGCM3", names=c("fossil occ.","backgroung"))
-
 #t Student test
 a <- t.test(x=fos_H_BCC, y=back_H_BCC, alternative="greater")
 b <- t.test(x=fos_H_CCSM4, y=back_H_CCSM4, alternative="greater")
@@ -1019,30 +1006,6 @@ round(g$p.value, 3)
 round(h$p.value, 3)
 round(i$p.value, 3)
 
-##
-
-#HOLOCENE - MEAN AVERAGE SUITABILITY IN FOSSIL RECORD
-boxplot(
-fos_H_BCC, 
-fos_H_CCSM4, 
-fos_H_CNRM,
-fos_H_HadGEM2_CC,
-fos_H_HadGEM2_ES,
-fos_H_IPSL,
-fos_H_MIROC,
-fos_H_MPI,
-fos_H_MRI,
-main="Mean ENM suitabilities in the fossil occurrences - Mid-Holocene",
-axes=FALSE)
-
-axis(1, 1:9, labels=c("BCC","CCSM4","CNRM","HadGEM2_CC",
-"HadGEM2_ES","IPSL","MIROC","MPI","MRI"), 
-las=2, cex.axis=0.7)
-
-axis(2)
-
-box()
-
 ##############################################################
 ################## LGM - FOSSIL VS GENERAL ###################
 ##############################################################
@@ -1054,51 +1017,52 @@ fos_lgm <- shapefile("C:/Users/Frederico/Documents/0. Artigos/4. SUBMETIDOS/Cabr
 mask2 <- rasterize(fossil_prone,LGM_CCSM4)
 #plot(mask2)
 
-#BACKGROUND - FOSSIL PRONE REGION
+#BACKGROUND - FOSSIL PRONE REGION  ###########################################
 
 #####CCSM4
 LGM_CCSM4 <- raster("LGM_CCSM4.tif")
-LGM_CCSM42 <- mask2*LGM_CCSM4
+LGM_CCSM42_fp <- mask2*LGM_CCSM4
 fos_LGM_CCSM4 <- extract(x=LGM_CCSM4, y=fos_lgm)
-back_LGM_CCSM4 <- as.vector(as.matrix(LGM_CCSM42))
-back_LGM_CCSM4 <- back_LGM_CCSM4[!is.na(back_LGM_CCSM4)]
-#boxplot(fos_LGM_CCSM4, back_LGM_CCSM4, main="CCSM4", names=c("fossil occ.","backgroung"))
+back_LGM_CCSM4_fp <- as.vector(as.matrix(LGM_CCSM42_fp))
+back_LGM_CCSM4_fp <- LGM_CCSM42_fp[!is.na(LGM_CCSM42_fp)]
 
 #####MIROC-ESM
 LGM_MIROC <- raster("LGM_MIROC.tif")
-LGM_MIROC2 <- mask2*LGM_MIROC
+LGM_MIROC2_fp <- mask2*LGM_MIROC
 fos_LGM_MIROC <- extract(x=LGM_MIROC, y=fos_lgm)
-back_LGM_MIROC <- as.vector(as.matrix(LGM_MIROC2))
-back_LGM_MIROC <- back_LGM_MIROC[!is.na(back_LGM_MIROC)]
-#boxplot(fos_LGM_MIROC, back_LGM_MIROC, main="MIROC-ESM", names=c("fossil occ.","backgroung"))
-
-#####MPI-ESM-P
-LGM_MPI <- raster("LGM_MPI.tif")
-LGM_MPI2 <- mask2*LGM_MPI
-fos_LGM_MPI <- extract(x=LGM_MPI, y=fos_lgm)
-back_LGM_MPI <- as.vector(as.matrix(LGM_MPI2))
-back_LGM_MPI <- back_LGM_MPI[!is.na(back_LGM_MPI)]
-#boxplot(fos_LGM_MPI, back_LGM_MPI, main="MPI-ESM-P", names=c("fossil occ.","backgroung"))
-
-#BACKGROUND - FOSSIL PRONE REGION
-#####CCSM4
-back_LGM_CCSM4_fp <- as.vector(as.matrix(LGM_CCSM4))
-back_LGM_CCSM4_fp <- back_LGM_CCSM4_fp[!is.na(back_LGM_CCSM4_fp)]
-
-#####MIROC-ESM
-back_LGM_MIROC_fp <- as.vector(as.matrix(LGM_MIROC))
+back_LGM_MIROC_fp <- as.vector(as.matrix(LGM_MIROC2_fp))
 back_LGM_MIROC_fp <- back_LGM_MIROC_fp[!is.na(back_LGM_MIROC_fp)]
 
 #####MPI-ESM-P
-back_LGM_MPI_fp <- as.vector(as.matrix(LGM_MPI))
+LGM_MPI <- raster("LGM_MPI.tif")
+LGM_MPI2_fp <- mask2*LGM_MPI
+fos_LGM_MPI <- extract(x=LGM_MPI, y=fos_lgm)
+back_LGM_MPI_fp <- as.vector(as.matrix(LGM_MPI2_fp))
 back_LGM_MPI_fp <- back_LGM_MPI_fp[!is.na(back_LGM_MPI_fp)]
 
-########## ALL LGM
-par(mfrow=c(1,3))
-boxplot(fos_LGM_CCSM4, back_LGM_CCSM4, main="CCSM4", names=c("fossil occ.","backgroung"))
-boxplot(fos_LGM_MIROC, back_LGM_MIROC, main="MIROC-ESM", names=c("fossil occ.","backgroung"))
-boxplot(fos_LGM_MPI, back_LGM_MPI, main="MPI-ESM-P", names=c("fossil occ.","backgroung"))
+#t Student test
+j_fp <- t.test(x=fos_LGM_CCSM4, y=back_LGM_CCSM4_fp, alternative="greater")
+l_fp <- t.test(x=fos_LGM_MIROC,y=back_LGM_MIROC_fp, alternative="greater")
+m_fp <- t.test(x=fos_LGM_MPI, y=back_LGM_MPI_fp, alternative="greater")
 
+round(j_fp$p.value,3)
+round(l_fp$p.value,3)
+round(m_fp$p.value,3)
+
+#BACKGROUND - ALL AREA  ###########################################
+#####CCSM4
+back_LGM_CCSM4 <- as.vector(as.matrix(LGM_CCSM4))
+back_LGM_CCSM4 <- back_LGM_CCSM4[!is.na(back_LGM_CCSM4)]
+
+#####MIROC-ESM
+back_LGM_MIROC <- as.vector(as.matrix(LGM_MIROC))
+back_LGM_MIROC <- back_LGM_MIROC[!is.na(back_LGM_MIROC)]
+
+#####MPI-ESM-P
+back_LGM_MPI <- as.vector(as.matrix(LGM_MPI))
+back_LGM_MPI <- back_LGM_MPI[!is.na(back_LGM_MPI)]
+
+#t Student test
 j <- t.test(x=fos_LGM_CCSM4, y=back_LGM_CCSM4, alternative="greater")
 l <- t.test(x=fos_LGM_MIROC,y=back_LGM_MIROC, alternative="greater")
 m <- t.test(x=fos_LGM_MPI, y=back_LGM_MPI, alternative="greater")
@@ -1106,21 +1070,6 @@ m <- t.test(x=fos_LGM_MPI, y=back_LGM_MPI, alternative="greater")
 round(j$p.value,3)
 round(l$p.value,3)
 round(m$p.value,3)
-
-#LGM - MEAN AVERAGE SUITABILITY IN FOSSIL RECORD
-boxplot(
-fos_LGM_CCSM4,
-fos_LGM_MIROC,
-fos_LGM_MPI,
-main="Mean ENM suitabilities in the fossil occurrences - LGM",
-axes=FALSE)
-
-axis(1, 1:3, labels=c("CCSM4","MIROC","MPI"), 
-las=0, cex.axis=1)
-
-axis(2)
-
-box()
 
 
 #############################################################################
