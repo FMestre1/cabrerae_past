@@ -1248,13 +1248,13 @@ HOL_ipsl_mri <- fuzzySim::modOverlap(hol_ipsl,hol_mri)
 #############################################################################
 #Average and variance in both projections
 
-setwd("C:/Users/FMest/Desktop")
+#setwd("C:/Users/FMest/Desktop")
 
 #LGM
 LGM <- stack(LGM_R_miroc, LGM_R_ccsm4, LGM_R_mpi)
 
 #YD
-YD2
+D3 <- raster("YD.tif")
 
 #MH
 MH <- stack(HOL_R_miroc, HOL_R_mpi, HOL_R_bcc, HOL_R_ccsm4, HOL_R_cnrm,
