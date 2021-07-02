@@ -16,7 +16,7 @@
 #by F. Mestre
 
 #Set working directory
-setwd("D:/")
+#setwd("D:/")
 
 
 #Create temporary folder for intermediate results

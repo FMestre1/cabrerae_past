@@ -29,6 +29,9 @@ mc_current_ES <- BIOMOD_EnsembleForecasting( projection.output=mc_current,
 ######################## Mid-Holocene ########################
 ##############################################################
 
+#Load current coastline (assuming roughly the same to the MH)
+study_site <- raster::shapefile("C:/Doc/areaestudo.shp")
+
 #BCC-CSM1-1########################################################################
 #ADD GRIDS
 bio4_H_BCC <- raster("D:/Dados climáticos/Dados do passado/Holoceno-Mais_recente/BCC-CSM1-1/bcmidbi4.tif")
