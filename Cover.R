@@ -30,7 +30,7 @@ library(plyr)
 library(fuzzySim)
 
 #Install development version of biomod2
-devtools::install_github('biomodhub/biomod2', dependencies = TRUE)
+#devtools::install_github('biomodhub/biomod2', dependencies = TRUE)
 
 #Package citation
 citation(package = "biomod2", lib.loc = NULL, auto = NULL)

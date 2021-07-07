@@ -3,24 +3,26 @@
 #02-07-2021
 
 #Load species occurrence data
-mc <- readShapePoly("~/Mcabrerae.shp")
-mc<-mc@data
-mc<-mc[,c(5,6,9)]
-mc <- mc[mc[,3]==1,1:2]
-mc <- SpatialPoints(mc)
+
+# Convert data frame to sf object
+mc3 <- sf::st_as_sf(x = mc,coords = c("X", "Y"), crs = "+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
+mc3 <- as(mc3, "Spatial")
+mc3 <- mc3[mc3$revisao_pr==1,]
+nrow(mc3)
+plot(mc3)
+names(mc3@data)[2] <- "mc"
+save(mc3, file="mc3.RData")
 
 #Loading variables
-bio4 <- raster("current/bio4.tif")
-bio8 <- raster("current/bio8.tif")
-bio12 <- raster("current/bio12.tif")
-bio18 <- raster("current/bio18.tif")
-vars <- stack(bio4, bio8, bio12, bio18)
+vars <- stack(b3, b8, b12, b18)
+names(vars) <- c("bio3", "bio8", "bio12", "bio18")
 plot(vars)
 
 #Format data for biomod2
-data_biomod <- BIOMOD_FormatingData(resp.var = mc,
+data_biomod <- BIOMOD_FormatingData(resp.var = as.numeric(mc5$mc),
                                     expl.var = vars,
-                                    resp.name = "mc3",
+                                    resp.xy = mc5_coords,
+                                    resp.name = "mc",
                                     PA.nb.rep = 5,
                                     PA.nb.absences = 469*2,
                                     PA.strategy = "random",

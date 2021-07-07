@@ -14,6 +14,8 @@ mean_LGM <- calc(LGM, fun=mean)
 sd_LGM <- calc(LGM, fun=sd)
 writeRaster(x=mean_LGM, filename="mean_LGM", format="ascii")
 writeRaster(x=sd_LGM, filename="sd_LGM", format="ascii")
+plot(mean_LGM)
+
 
 ################################################################
 ######################### MID HOLOCENE #########################
@@ -26,8 +28,20 @@ mean_MH <- calc(MH, fun=mean)
 sd_MH <- calc(MH, fun=sd)
 writeRaster(x=mean_MH, filename="mean_MH", format="ascii")
 writeRaster(x=sd_MH, filename="sd_MH", format="ascii")
+plot(mean_MH)
 
 
-
-#NOTE: To the Younger Dryas there is only on projection, no verage or SD are computed
+#NOTE: To the Younger Dryas there is only one projection, no average or SD are derived
 YD3 <- raster("YD.tif")
+plot(YD3)
+
+
+################################################################
+######################## PLOT TOGETHER #########################
+################################################################
+
+par(mfrow=c(2,2))
+plot(mean_LGM, main = "LGM")
+plot(YD3, main = "YD")
+plot(mean_MH, main = "MH")
+plot(CURRENT_MODEL, main = "Current")
