@@ -22,8 +22,8 @@ for (i in 1:5){
 out_VI <- apply(simplify2array(v_l), 1:2, mean)
 
 #ANN has one NA (remove that 'run')
-ANN_VI <- apply(simplify2array(v_l[c(-6,-20)]), 1:2, mean)
-ANN_VI <- as.numeric(ANN_VI[,5])
-out_VI[,5] <- ANN_VI
+#ANN_VI <- apply(simplify2array(v_l[c(-6,-20)]), 1:2, mean)
+#ANN_VI <- as.numeric(ANN_VI[,5])
+#out_VI[,5] <- ANN_VI
 
 write.table(out_VI, file="VI.csv")

@@ -5,13 +5,8 @@
 #Load species occurrence data
 
 # Convert data frame to sf object
-mc3 <- sf::st_as_sf(x = mc,coords = c("X", "Y"), crs = "+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
-mc3 <- as(mc3, "Spatial")
-mc3 <- mc3[mc3$revisao_pr==1,]
-nrow(mc3)
-plot(mc3)
-names(mc3@data)[2] <- "mc"
-save(mc3, file="mc3.RData")
+load("mc3.RData")
+mc3_coords <- mc3@coords
 
 #Loading variables
 vars <- stack(b3, b8, b12, b18)
@@ -19,9 +14,9 @@ names(vars) <- c("bio3", "bio8", "bio12", "bio18")
 plot(vars)
 
 #Format data for biomod2
-data_biomod <- BIOMOD_FormatingData(resp.var = as.numeric(mc5$mc),
+data_biomod <- BIOMOD_FormatingData(resp.var = as.numeric(mc3$mc),
                                     expl.var = vars,
-                                    resp.xy = mc5_coords,
+                                    resp.xy = mc3_coords,
                                     resp.name = "mc",
                                     PA.nb.rep = 5,
                                     PA.nb.absences = 469*2,
@@ -32,6 +27,7 @@ data_biomod <- BIOMOD_FormatingData(resp.var = as.numeric(mc5$mc),
                                     PA.table = NULL,
                                     na.rm = TRUE)
 
+data_biomod
 
 #Modelling
 model_opt <- BIOMOD_ModelingOptions(

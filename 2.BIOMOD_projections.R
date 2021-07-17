@@ -23,8 +23,6 @@ mc_current_ES <- BIOMOD_EnsembleForecasting( projection.output=mc_current,
                                              binary.meth = "TSS",
                                              filtered.meth = "TSS")
 
-
-
 ##############################################################
 ######################## Mid-Holocene ########################
 ##############################################################
@@ -38,6 +36,7 @@ bio3_H_BCC <- raster("D:/Dados climáticos/Dados do passado/Holoceno-Mais_recent
 bio8_H_BCC <- raster("D:/Dados climáticos/Dados do passado/Holoceno-Mais_recente/BCC-CSM1-1/bcmidbi8.tif")
 bio12_H_BCC <- raster("D:/Dados climáticos/Dados do passado/Holoceno-Mais_recente/BCC-CSM1-1/bcmidbi12.tif")
 bio18_H_BCC <- raster("D:/Dados climáticos/Dados do passado/Holoceno-Mais_recente/BCC-CSM1-1/bcmidbi18.tif")
+
 #Stack
 HOL_BCC <- stack(bio3_H_BCC,bio8_H_BCC,bio12_H_BCC,bio18_H_BCC) 
 HOL_BCC_C <- crop(HOL_BCC, study_site)
@@ -539,49 +538,49 @@ mc_LGM_MPI_Ens <- BIOMOD_EnsembleForecasting( projection.output=mc_lgm_mpi,
 
 #Current
 CURRENT_MODEL <- unstack(mc_current_ES@proj@val)[[7]]
-writeRaster(x=CURRENT_MODEL, filename="CURRENT_MODEL.tif")
+writeRaster(x=CURRENT_MODEL, filename="CURRENT_MODEL.tif", overwrite = TRUE)
 
 #Mid-Holocene
 
 HOL_MRI <- unstack(mc_Hol_MRI_Ens@proj@val)[[7]]
-writeRaster(x=HOL_MRI, filename="HOL_MRI.tif")
+writeRaster(x=HOL_MRI, filename="HOL_MRI.tif", overwrite=TRUE)
 
 HOL_MPI <- unstack(mc_Hol_MPI_Ens@proj@val)[[7]]
-writeRaster(x=HOL_MPI, filename="HOL_MPI.tif")
+writeRaster(x=HOL_MPI, filename="HOL_MPI.tif", overwrite=TRUE)
 
 HOL_MIROC <- unstack(mc_Hol_MIROC_Ens@proj@val)[[7]]
-writeRaster(x=HOL_MIROC, filename="HOL_MIROC.tif")
+writeRaster(x=HOL_MIROC, filename="HOL_MIROC.tif", overwrite=TRUE)
 
 HOL_IPSL <- unstack(mc_Hol_IPSL_Ens@proj@val)[[7]]
-writeRaster(x=HOL_IPSL, filename="HOL_IPSL.tif")
+writeRaster(x=HOL_IPSL, filename="HOL_IPSL.tif", overwrite=TRUE)
 
 HOL_HadGEM2_ES <- unstack(mc_Hol_HadGEM2_ES_Ens@proj@val)[[7]]
-writeRaster(x=HOL_HadGEM2_ES, filename="HOL_HadGEM2_ES.tif")
+writeRaster(x=HOL_HadGEM2_ES, filename="HOL_HadGEM2_ES.tif", overwrite=TRUE)
 
 HOL_HadGEM2_CC <- unstack(mc_Hol_HadGEM2_CC_Ens@proj@val)[[7]]
-writeRaster(x=HOL_HadGEM2_CC, filename="HOL_HadGEM2_CC.tif")
+writeRaster(x=HOL_HadGEM2_CC, filename="HOL_HadGEM2_CC.tif", overwrite=TRUE)
 
 HOL_CNRM <- unstack(mc_Hol_CNRM_Ens@proj@val)[[7]]
-writeRaster(x=HOL_CNRM, filename="HOL_CNRM.tif")
+writeRaster(x=HOL_CNRM, filename="HOL_CNRM.tif", overwrite=TRUE)
 
 HOL_CCSM4 <- unstack(mc_Hol_CCSM4_Ens@proj@val)[[7]]
-writeRaster(x=HOL_CCSM4, filename="HOL_CCSM4.tif")
+writeRaster(x=HOL_CCSM4, filename="HOL_CCSM4.tif", overwrite=TRUE)
 
 HOL_BCC <- unstack(mc_Hol_BCC_Ens@proj@val)[[7]]
-writeRaster(x=HOL_BCC, filename="HOL_BCC.tif")
+writeRaster(x=HOL_BCC, filename="HOL_BCC.tif", overwrite=TRUE)
 
 #Younger Dryas
 
 YD2 <- unstack(mc_YD_Ens@proj@val)[[7]]
-writeRaster(x=YD2, filename="YD.tif")
+writeRaster(x=YD2, filename="YD.tif", overwrite=TRUE)
 
 #Last Glacial Maximum
 
 LGM_MPI <- unstack(mc_LGM_MPI_Ens@proj@val)[[7]]
-writeRaster(x=LGM_MPI, filename="LGM_MPI.tif")
+writeRaster(x=LGM_MPI, filename="LGM_MPI.tif", overwrite=TRUE)
 
 LGM_MIROC <- unstack(mc_LGM_MIROC_Ens@proj@val)[[7]]
-writeRaster(x=LGM_MIROC, filename="LGM_MIROC.tif")
+writeRaster(x=LGM_MIROC, filename="LGM_MIROC.tif", overwrite=TRUE)
 
 LGM_CCSM4 <- unstack(mc_LGM_CCSM4_Ens@proj@val)[[7]]
-writeRaster(x=LGM_CCSM4, filename="LGM_CCSM4.tif")
+writeRaster(x=LGM_CCSM4, filename="LGM_CCSM4.tif", overwrite=TRUE)

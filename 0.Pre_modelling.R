@@ -4,6 +4,7 @@
 
 #Load study site shapefil
 study_site <- raster::shapefile("C:/Doc/areaestudo.shp")
+load("mc3.RData")
 
 #Load rasters
 b1 <- raster("D:/Dados climáticos/WorldClim 2.0/wc2.1_30s_bio/wc2.1_30s_bio_1.tif")
@@ -124,18 +125,31 @@ View(cor1)
 write.table(cor1, file = "correlations.csv")
 
 ####
-#Test using fuzzySim
-mc_05 <- rbind(mc[mc$revisao_pr==1,], dplyr::sample_n(mc[mc$revisao_pr==0,],nrow(mc[mc$revisao_pr==1,])*2))
+#Using fuzzySim
+mc_poly <- raster::shapefile("C:/Doc/Especies/Mcabrerae_total/Mcabrerae_total_3.shp")
+#plot(mc_poly)
+mc_poly <- mc_poly@data
+mc_poly <- mc_poly[mc_poly$Presenca==0,][,5:6]
+mc_poly <- data.frame(mc_poly,0)
+names(mc_poly)[3] <- "mc"
+#
+mc_pres <- data.frame(mc3@coords, mc3$mc)
+names(mc_pres) <- names(mc_poly)
+#
+mc <- rbind(mc_poly,mc_pres)
+#
+#mc_05 <- rbind(mc[mc$mc==1,], dplyr::slice_sample(mc[mc$mc==0,],n = nrow(mc[mc$mc==1,])*2))
+mc_05 <- rbind(mc[mc$mc==1,], dplyr::slice_sample(mc[mc$mc==0,],n = nrow(mc[mc$mc==1,])))
 
-vars_predict_env <- raster::extract(vt, mc_05[,2:3])
+vars_predict_env <- raster::extract(vt, mc_05[,1:2])
 vars_predict_env <- as.data.frame(vars_predict_env)
 #head(vars_predict_env)
-vars_predict_env <- data.frame(mc_05$revisao_pr, vars_predict_env)
+vars_predict_env <- data.frame(mc_05$mc, vars_predict_env)
 names(vars_predict_env)[1] <- "mc"
-
+#ncol(vars_predict_env)
 select_vars <- fuzzySim::corSelect(vars_predict_env, sp.cols = 1, 
                                    var.cols = 2:20, cor.thresh = 0.7, method = "spearman",
                                    select = "p.value", use = "pairwise.complete.obs")
 
 select_vars$selected.vars
-#"bio3"  "bio8"  "bio12" "bio18"
+#selected these variables "bio3"  "bio8"  "bio12" "bio18"

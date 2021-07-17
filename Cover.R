@@ -41,4 +41,4 @@ citation("plyr")
 
 #Save environment
 save.image(file='cabrerae_past.RData')
-
+load('cabrerae_past.RData')
