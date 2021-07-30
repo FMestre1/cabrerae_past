@@ -27,7 +27,7 @@ data_biomod <- BIOMOD_FormatingData(resp.var = as.numeric(mc3$mc),
                                     PA.table = NULL,
                                     na.rm = TRUE)
 
-data_biomod
+#data_biomod
 
 #Modelling
 model_opt <- BIOMOD_ModelingOptions(
