@@ -1,7 +1,11 @@
 #FMestre
 #02-08-2021
 
-#BCC-CSM1-1########################################################################
+##############################################################
+######################### HOLOCENE ###########################
+##############################################################
+
+#BCC-CSM1-1###################################################
 #ADD GRIDS
 bio3_H_BCC <- raster("D:/Dados climáticos/Dados do passado/Holoceno-Mais_recente/BCC-CSM1-1/bcmidbi3.tif")
 bio8_H_BCC <- raster("D:/Dados climáticos/Dados do passado/Holoceno-Mais_recente/BCC-CSM1-1/bcmidbi8.tif")
@@ -20,7 +24,7 @@ HOL_BCC_C <- mask(HOL_BCC_C, study_site)
 HOL_BCC_C <- stack(HOL_BCC_C)
 names(HOL_BCC_C) <- c("bio3", "bio8", "bio12", "bio18")
 
-#CCSM4 ########################################################################
+#CCSM4 #######################################################
 
 #ADD GRIDS
 bio3_H_CCSM4 <- raster("D:/Dados climáticos/Dados do passado/Holoceno-Mais_recente/CCSM4/ccmidbi3.tif")
@@ -41,7 +45,7 @@ hol_CCSM4_C <- stack(hol_CCSM4_C)
 names(hol_CCSM4_C)<- c("bio3","bio8","bio12","bio18")
 #plot(hol_CCSM4_C)
 
-#CNRM-CM5 ########################################################################
+#CNRM-CM5 ####################################################
 
 #ADD GRIDS
 bio3_H_CNRM <- raster("D:/Dados climáticos/Dados do passado/Holoceno-Mais_recente/CNRM-CM5/cnmidbi3.tif")
@@ -63,7 +67,7 @@ names(hol_CNRM_C)<- c("bio3","bio8","bio12","bio18")
 #plot(hol_CNRM_C)
 
 
-#HadGEM2 - CC ########################################################################
+#HadGEM2 - CC ################################################
 
 #ADD GRIDS
 bio3_H_HadGEM2_CC <- raster("D:/Dados climáticos/Dados do passado/Holoceno-Mais_recente/HadGEM2-CC/hgmidbi3.tif")
@@ -85,7 +89,7 @@ names(hol__HadGEM2_CC_C)<- c("bio3","bio8","bio12","bio18")
 #plot(hol__HadGEM2_CC_C)
 
 
-#HadGEM2 - ES ########################################################################
+#HadGEM2 - ES ################################################
 
 #ADD GRIDS
 bio3_H_HadGEM2_ES <- raster("D:/Dados climáticos/Dados do passado/Holoceno-Mais_recente/HadGEM2-ES/hemidbi3.tif")
@@ -107,7 +111,7 @@ names(hol__HadGEM2_ES_C)<- c("bio3","bio8","bio12","bio18")
 #plot(hol__HadGEM2_ES_C)
 
 
-#IPSL ########################################################################
+#IPSL ########################################################
 
 #ADD GRIDS
 bio3_H_IPSL <- raster("D:/Dados climáticos/Dados do passado/Holoceno-Mais_recente/IPSL-CM5A-LR/ipmidbi3.tif")
@@ -130,7 +134,7 @@ names(hol_IPSL_C)<- c("bio3","bio8","bio12","bio18")
 #plot(hol_IPSL_C)
 
 
-#MIROC ########################################################################
+#MIROC ########################################################
 
 #ADD GRIDS
 bio3_H_MIROC <- raster("D:/Dados climáticos/Dados do passado/Holoceno-Mais_recente/MIROC_ESM/mrmidbi3.tif")
@@ -152,7 +156,7 @@ names(hol_MIROC_C)<- c("bio3","bio8","bio12","bio18")
 #plot(hol_MIROC_C)
 
 
-#MPI ########################################################################
+#MPI ###########################################################
 
 #ADD GRIDS
 bio3_H_MPI <- raster("D:/Dados climáticos/Dados do passado/Holoceno-Mais_recente/MPI-ESM-P/memidbi3.tif")
@@ -174,7 +178,7 @@ names(hol_MPI_C)<- c("bio3","bio8","bio12","bio18")
 #plot(hol_MPI_C)
 
 
-#MRI ########################################################################
+#MRI ###########################################################
 
 #ADD GRIDS
 bio3_H_MRI <- raster("D:/Dados climáticos/Dados do passado/Holoceno-Mais_recente/MRI-CGCM3/mgmidbi3.tif")
@@ -232,7 +236,7 @@ LGM_study_site <- shapefile("C:/Users/Frederico/Documents/0. Artigos/4. SUBMETID
 #LGM_study_site <- shapefile("LGM_PI_FR.shp")
 #plot(LGM_study_site)
 
-#CCSM4 ########################################################################
+#CCSM4 #######################################################
 
 #ADD GRIDS
 bio3_LGM_CCSM4 <- raster("D:/Dados climáticos/Dados do passado/LGM-Mais_recentes/CCSM4/cclgmbi3.tif")
@@ -254,7 +258,7 @@ names(LGM_CCSM4_C)<- c("bio3","bio8","bio12","bio18")
 #plot(LGM_CCSM4_C)
 
 
-#MIROC ########################################################################
+#MIROC #######################################################
 
 #ADD GRIDS# 
 bio3_LGM_MIROC <- raster("D:/Dados climáticos/Dados do passado/LGM-Mais_recentes/MIROC-ESM/mrlgmbi3.tif")
@@ -276,7 +280,7 @@ names(LGM_MIROC_C)<- c("bio3","bio8","bio12","bio18")
 #plot(LGM_MIROC_C)
 
 
-#MPI ########################################################################
+#MPI #########################################################
 
 #ADD GRIDS
 bio3_LGM_MPI <- raster("D:/Dados climáticos/Dados do passado/LGM-Mais_recentes/MPI-ESM-P/melgmbi3.tif")
