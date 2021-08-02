@@ -2,6 +2,8 @@
 #FMestre
 #02-07-2021
 
+setwd("D:/model_past/")
+
 #Load species occurrence data
 
 # Convert data frame to sf object
@@ -27,9 +29,8 @@ data_biomod <- BIOMOD_FormatingData(resp.var = as.numeric(mc3$mc),
                                     PA.table = NULL,
                                     na.rm = TRUE)
 
-#data_biomod
 
-#Modelling
+#Modelling options
 model_opt <- BIOMOD_ModelingOptions(
   GLM = list( type = 'polynomial',#Modifiquei
               interaction.level = 0,
@@ -82,7 +83,7 @@ model_opt <- BIOMOD_ModelingOptions(
               rang = 0.1,
               maxit = 200),
   
-  FDA = list( method = 'mars'),
+ #FDA = list( method = 'mars'),
   
   MARS = list( degree = 2,
                penalty = 2,
@@ -97,7 +98,7 @@ model_opt <- BIOMOD_ModelingOptions(
 )
 
 mc_model <- BIOMOD_Modeling( data_biomod,
-                             models = c("GLM","GBM","GAM","CTA","ANN","FDA","MARS","RF"),
+                             models = c("GLM","GBM","GAM","CTA","ANN","MARS","RF"),
                              models.options = model_opt,
                              NbRunEval=5,
                              DataSplit=70,
