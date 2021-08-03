@@ -2,7 +2,7 @@
 #FMestre
 #02-07-2021
 
-setwd("D:/model_past/")
+setwd("D:/model_past2/")
 
 #Load species occurrence data
 

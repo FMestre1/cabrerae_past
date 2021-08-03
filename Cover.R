@@ -18,7 +18,7 @@
 #Set working directory
 #setwd("D:/")
 
-setwd("D:/model_past2")
+setwd("C:/Users/Frederico/Documents/github/cabrerae_past2")
 
 #Create temporary folder for intermediate results
 #rasterOptions(tmpdir="D:/biomod_temp")

@@ -205,8 +205,8 @@ names(hol_MRI_C)<- c("bio3","bio8","bio12","bio18")
 ############################# YD #############################
 ##############################################################
 
-#YD_coastline <- shapefile("C:/Doc/costa_YD.shp")
-YD_coastline <- shapefile("costa_YD.shp")
+YD_coastline <- shapefile("D:/Doc/costa_YD.shp")
+#YD_coastline <- shapefile("costa_YD.shp")
 
 #Load rasters
 bio3_YD <- raster("D:/Dados climáticos/Dados do passado/PaleoClim/2.5m/YDS_v1_2_5m/bio_3.tif")
@@ -300,5 +300,4 @@ LGM_MPI_C <- mask(LGM_MPI_C, LGM_study_site)
 LGM_MPI_C <- stack(LGM_MPI_C)
 names(LGM_MPI_C)<- c("bio3","bio8","bio12","bio18")
 #plot(LGM_MPI_C)
-
 

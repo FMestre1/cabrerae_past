@@ -6,14 +6,12 @@
 fossil_prone <- shapefile("D:/sig_past_cabrera_distribution/fossilProne/fossil_prone.shp")
 #plot(fossil_prone)
 
-
 ##############################################################
 ############### MID-HOLOCENE - FOSSIL AND ENM ################
 ##############################################################
 
 #Fossil Shapefile for the MH
 fos_hol <- shapefile("C:/Users/Frederico/Documents/0. Artigos/4. SUBMETIDOS/Cabrerae Paleodistribution/Paleo/fossils_MH.shp")
-
 
 ############# FOSSILS vs FOSSIL PRONE AREA ############
 
@@ -177,7 +175,7 @@ mask3 <- rasterize(fossil_prone, YD2)
 
 YD_out <- raster("YD.tif")
 YD_out2 <- mask3*YD_out
-fos_YD <- extract(x=YD_out, y=fos_lgm)
+fos_YD <- raster::extract(x=YD_out, y=fos_lgm)
 back_YD_fp <- as.vector(as.matrix(YD_out2))
 back_YD_fp <- back_YD_fp[!is.na(back_YD_fp)]
 

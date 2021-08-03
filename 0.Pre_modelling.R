@@ -3,7 +3,7 @@
 #02-07-2021
 
 #Load study site shapefil
-study_site <- raster::shapefile("C:/Doc/areaestudo.shp")
+study_site <- raster::shapefile("D:/Doc/areaestudo.shp")
 #study_site <- raster::shapefile("C:/github_projects/cabrerae_past/areaestudo.shp")
 load("mc3.RData")
 
@@ -148,7 +148,7 @@ write.table(cor1, file = "correlations.csv")
 
 ####
 #Using fuzzySim
-mc_poly <- raster::shapefile("C:/Doc/Especies/Mcabrerae_total/Mcabrerae_total_3.shp")
+mc_poly <- raster::shapefile("D:/Doc/Especies/Mcabrerae_total/Mcabrerae_total_3.shp")
 #mc_poly <- raster::shapefile("Mcabrerae_total_3.shp")
 
 #plot(mc_poly)

@@ -23,7 +23,6 @@ mc_current <-BIOMOD_Projection(modeling.output=mc_model,
                                compress = "gzip",
                                build.clamping.mask = FALSE)
 
-
 mc_current_ES <- BIOMOD_EnsembleForecasting( projection.output=mc_current,
                                              EM.output=mc_model_ensemble,
                                              total.consensus = TRUE,
@@ -35,7 +34,7 @@ mc_current_ES <- BIOMOD_EnsembleForecasting( projection.output=mc_current,
 ##############################################################
 
 #Load current coastline (assuming roughly the same to the MH)
-study_site <- raster::shapefile("C:/Doc/areaestudo.shp")
+study_site <- raster::shapefile("D:/Doc/areaestudo.shp")
 
 #BCC-CSM1-1########################################################################
 
@@ -411,6 +410,4 @@ writeRaster(x=LGM_MIROC, filename="LGM_MIROC.tif", overwrite=TRUE)
 
 LGM_CCSM4 <- unstack(mc_LGM_CCSM4_Ens@proj@val)[[7]]
 writeRaster(x=LGM_CCSM4, filename="LGM_CCSM4.tif", overwrite=TRUE)
-
-
 
