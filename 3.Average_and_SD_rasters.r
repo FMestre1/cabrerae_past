@@ -84,4 +84,4 @@ plot(CURRENT_MODEL, main = "Current")
 
 dev.off()
 
-
+save.image()

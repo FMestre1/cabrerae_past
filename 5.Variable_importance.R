@@ -27,3 +27,5 @@ out_VI <- apply(simplify2array(v_l), 1:2, mean)
 #out_VI[,5] <- ANN_VI
 
 write.table(out_VI, file="VI.csv")
+
+save.image()

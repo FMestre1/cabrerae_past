@@ -96,3 +96,7 @@ HOL_hadgem2_es_mri <- fuzzySim::modOverlap(hol_hadgem2_es,hol_mri)
 
 HOL_ipsl_mri <- fuzzySim::modOverlap(hol_ipsl,hol_mri)
 
+#
+
+save.image()
+

@@ -16,6 +16,7 @@ fos_hol <- shapefile("C:/Users/Frederico/Documents/0. Artigos/4. SUBMETIDOS/Cabr
 ############# FOSSILS vs FOSSIL PRONE AREA ############
 
 mask1 <- rasterize(fossil_prone, HOL_BCC)
+plot(mask1)
 
 #####BCC-CSM1-1
 H_BCC <- raster("HOL_BCC.tif")
@@ -162,34 +163,6 @@ round(h$p.value, 3)
 round(i$p.value, 3)
 
 ##############################################################
-############### YOUNGER DRYAS - FOSSIL AND ENM ###############
-##############################################################
-
-############# FOSSILS vs FOSSIL PRONE AREA ############
-
-#Do not to which fossil record to compare. Maybe LGM?!
-
-#Ceating mask rasters
-mask3 <- rasterize(fossil_prone, YD2)
-#plot(mask3)
-
-YD_out <- raster("YD.tif")
-YD_out2 <- mask3*YD_out
-fos_YD <- raster::extract(x=YD_out, y=fos_lgm)
-back_YD_fp <- as.vector(as.matrix(YD_out2))
-back_YD_fp <- back_YD_fp[!is.na(back_YD_fp)]
-
-m_fp <- t.test(x=fos_YD, y=back_YD_fp, alternative="greater")
-
-################## FOSSILS vs ALL AREA ################
-
-back_YD <- as.vector(as.matrix(YD_out))
-back_YD <- back_YD[!is.na(back_YD)]
-
-#t Student test
-n <- t.test(x=fos_YD, y=back_YD, alternative="greater")
-
-##############################################################
 #################### LGM - FOSSIL AND ENM ####################
 ##############################################################
 
@@ -255,5 +228,37 @@ m <- t.test(x=fos_LGM_MPI, y=back_LGM_MPI, alternative="greater")
 round(j$p.value,3)
 round(l$p.value,3)
 round(m$p.value,3)
+
+##############################################################
+############### YOUNGER DRYAS - FOSSIL AND ENM ###############
+##############################################################
+
+############# FOSSILS vs FOSSIL PRONE AREA ############
+
+#Do not to which fossil record to compare. Maybe LGM?!
+
+#Ceating mask rasters
+mask3 <- rasterize(fossil_prone, YD2)
+#plot(mask3)
+
+YD_out <- raster("YD.tif")
+YD_out2 <- mask3*YD_out
+fos_YD <- raster::extract(x=YD_out, y=fos_lgm)
+back_YD_fp <- as.vector(as.matrix(YD_out2))
+back_YD_fp <- back_YD_fp[!is.na(back_YD_fp)]
+
+n_fp <- t.test(x=fos_YD, y=back_YD_fp, alternative="greater")
+
+round(n_fp$p.value,3)
+
+################## FOSSILS vs ALL AREA ################
+
+back_YD <- as.vector(as.matrix(YD_out))
+back_YD <- back_YD[!is.na(back_YD)]
+
+#t Student test
+n <- t.test(x=fos_YD, y=back_YD, alternative="greater")
+
+round(n$p.value,3)
 
 save.image()
