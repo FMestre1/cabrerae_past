@@ -2,20 +2,13 @@
 #FMestre
 #02-07-2021
 
-#30/07/2021
-#Remove FDA
-
-#models1 <- mc_model@models.computed
-#models1 <- models1[stringr::str_detect(models1, pattern="_FDA", negate = TRUE)]
-#mc_model_ensemble <- mc_model_ensemble_test
-
 ##############################################################
 ########################## Current ###########################
 ##############################################################
 
 #Projecting the model into current environmental conditions
 mc_current <-BIOMOD_Projection(modeling.output=mc_model,
-                               new.env=vars,
+                               new.env=CURRENT_C,
                                proj.name="mc_current",
                                selected.models = "all",
                                binary.meth = "TSS",
@@ -32,9 +25,6 @@ mc_current_ES <- BIOMOD_EnsembleForecasting( projection.output=mc_current,
 ##############################################################
 ######################## Mid-Holocene ########################
 ##############################################################
-
-#Load current coastline (assuming roughly the same to the MH)
-study_site <- raster::shapefile("D:/Doc/areaestudo.shp")
 
 #BCC-CSM1-1########################################################################
 
@@ -411,3 +401,4 @@ writeRaster(x=LGM_MIROC, filename="LGM_MIROC.tif", overwrite=TRUE)
 LGM_CCSM4 <- unstack(mc_LGM_CCSM4_Ens@proj@val)[[7]]
 writeRaster(x=LGM_CCSM4, filename="LGM_CCSM4.tif", overwrite=TRUE)
 
+save.image()

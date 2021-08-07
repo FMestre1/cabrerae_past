@@ -2,17 +2,15 @@
 #FMestre
 #02-07-2021
 
-setwd("D:/model_past2/")
-
 #Load species occurrence data
 
 # Convert data frame to sf object
-load("mc3.RData")
+load("C:/Users/Frederico/Documents/github/cabrerae_past2/mc3.RData")
 mc3_coords <- mc3@coords
 
 #Loading variables
-vars <- stack(b3, b8, b12, b18)
-names(vars) <- c("bio3", "bio8", "bio12", "bio18")
+vars <- stack(bio4_10, bio8_10, bio12_10, bio18_10)
+names(vars) <- c("bio4", "bio8", "bio12", "bio18")
 plot(vars)
 
 #Format data for biomod2
@@ -83,8 +81,6 @@ model_opt <- BIOMOD_ModelingOptions(
               rang = 0.1,
               maxit = 200),
   
- #FDA = list( method = 'mars'),
-  
   MARS = list( degree = 2,
                penalty = 2,
                thresh = 0.001,
@@ -96,6 +92,7 @@ model_opt <- BIOMOD_ModelingOptions(
              nodesize = 5,
              maxnodes = NULL)
 )
+
 
 mc_model <- BIOMOD_Modeling( data_biomod,
                              models = c("GLM","GBM","GAM","CTA","ANN","MARS","RF"),

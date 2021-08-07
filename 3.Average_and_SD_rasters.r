@@ -2,6 +2,11 @@
 #FMestre
 #02-07-2021
 
+setwd("D:/model_past4")
+
+#Save current as ASC
+writeRaster(x=CURRENT_MODEL, filename="CURRENT", format="ascii", overwrite=TRUE)
+
 ################################################################
 ############################# LGM ##############################
 ################################################################
@@ -17,6 +22,19 @@ sd_LGM <- calc(LGM, fun=sd)
 writeRaster(x=mean_LGM, filename="mean_LGM", format="ascii", overwrite=TRUE)
 writeRaster(x=sd_LGM, filename="sd_LGM", format="ascii", overwrite=TRUE)
 #plot(mean_LGM)
+
+
+################################################################
+######################## YOUNGER DRYAS #########################
+################################################################
+
+#NOTE: To the Younger Dryas there is only one projection, no average or SD are derived
+YD3 <- raster("YD.tif")
+#plot(YD3)
+
+#Save 
+writeRaster(x=YD3, filename="YD", format="ascii", overwrite=TRUE)
+
 
 ################################################################
 ######################### MID HOLOCENE #########################
@@ -43,12 +61,6 @@ writeRaster(x=mean_MH, filename="mean_MH", format="ascii", overwrite=TRUE)
 writeRaster(x=sd_MH, filename="sd_MH", format="ascii", overwrite=TRUE)
 #plot(mean_MH)
 
-
-#NOTE: To the Younger Dryas there is only one projection, no average or SD are derived
-YD3 <- raster("YD.tif")
-#plot(YD3)
-
-
 ################################################################
 ######################## PLOT TOGETHER #########################
 ################################################################
@@ -59,3 +71,17 @@ plot(YD3, main = "YD")
 plot(mean_MH, main = "MH")
 plot(CURRENT_MODEL, main = "Current")
 #dev.off()
+
+#Plot to pdf
+
+pdf(file = "models.pdf",width = 4, height = 4)
+
+par(mfrow=c(2,2))
+plot(mean_LGM, main = "LGM")
+plot(YD3, main = "YD")
+plot(mean_MH, main = "MH")
+plot(CURRENT_MODEL, main = "Current")
+
+dev.off()
+
+
