@@ -82,6 +82,29 @@ plot(YD3, main = "YD")
 plot(mean_MH, main = "MH")
 plot(CURRENT_MODEL, main = "Current")
 
-dev.off()
 
+#New plots
+#FMestre
+#11-10-2021
+
+library("rasterVis")
+library("raster")
+library("ggplot2")
+
+current <- raster("D:/PASTCABRERA/model_past4/CURRENT_MODEL.tif")
+mean_MH <- raster("D:/PASTCABRERA/model_past4/mean_MH.asc")
+YD3 <- raster("D:/PASTCABRERA/model_past4/YD.asc")
+mean_LGM <- raster("D:/PASTCABRERA/model_past4/mean_LGM.asc")
+
+colours_RYB <- colorRampPalette(c("khaki","firebrick4"))
+myTheme <- rasterVis::rasterTheme(region = colours_RYB(100))
+#
+my.at <- seq(0, 1000, 10)
+rasterVis::levelplot(current, at=my.at, margin = NA, contour=FALSE, par.settings = myTheme)
+rasterVis::levelplot(mean_MH, at=my.at, margin = NA, contour=FALSE, par.settings = myTheme)
+rasterVis::levelplot(YD3, at=my.at, margin = NA, contour=FALSE, par.settings = myTheme)
+rasterVis::levelplot(mean_LGM, at=my.at, margin = NA, contour=FALSE, par.settings = myTheme)
+
+
+dev.off()
 save.image()
